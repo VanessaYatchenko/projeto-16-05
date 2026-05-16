@@ -1,24 +1,35 @@
-name: CI
+name: CI 
 
 on:
   push:
 
 jobs:
-  build-VestFatec:
+  build-vestFatec:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar código
+      - name: Baixar Codigo
         uses: actions/checkout@v4
 
       - name: Instalando o JDK
         uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
-      - name: Compilar aplicação
+        with: 
+          distribution: temurin
+          java-version: 21
+          cache: maven
+          
+      - name: Compilar Aplicação
         run: mvn -B -DskipTests clean compile
 
       - name: Executar testes
-        run: mvn -B test
+        run: mvn -B test  
+
+      - name: Empacotação da Aplicação
+        run: mvn -B -DskipTests clean package
+
+      - name: Upload do Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: target/*.jar
+
